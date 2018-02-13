@@ -1,7 +1,7 @@
 Created by Matthew Goldberg on Feb 9th, 2018 in Python 3.6
 
 Stripes Project:
-—Create text using striped patterns. e.g. we draw the letter 'S' like so:
+—Create text using striped patterns. e.g. we draw the letter 'S' (looks the same as the number 2) like so:
 
 \\\\\\\\\\\\\\\
 \\\/////////\\\
