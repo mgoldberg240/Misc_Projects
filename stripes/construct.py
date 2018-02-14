@@ -10,23 +10,23 @@ unit = unit.unit
 shift = shift.shift
 plot_cells = cell_plot.plot_cells
 
-N = 10
+N = 5
 O = 0
+
+
 cell = unit(N,O)
+print(cell)
 
 
 
-#cell = shift(cell,'r',N,O)
-cell = shift(cell,'r',N,O)
-cell = shift(cell,'r',N,1)
-cell = shift(cell,'r',N,O)
-cell = shift(cell,'r',N,1)
 
-
-# print(cell)
-
-# print(cell.shape)
-
+for i in range(2,5):
+	cell = shift(cell,'r',N,1)
+cell = shift(cell,'r',N,0)
+cell = shift(cell,'d',N,0)
+for i in range(2,5):
+	cell = shift(cell,'l',N,1)
+cell = shift(cell,'l',N,0)
 
 
 plot_cells(cell,N)

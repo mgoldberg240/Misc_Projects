@@ -29,8 +29,11 @@ def shift(coord_array,direction,N,O):
 	elif direction in ['down','Down','DOWN','d','D']:
 		shift_array = [0,-N]
 
-	lC = 2*N # number of coordinates in a cell (lC = length of cell)
+	lC = 4*N-2 # number of coordinates in a cell (lC = length of cell)
 	shift = np.array([shift_array]*lC)
+	print('shift')
+	print("")
+	print(shift)
 	shift = coord_array[-lC:,:] + shift
 	combined = np.vstack([coord_array,shift]) # append new coordinates to bottom
 	return combined
