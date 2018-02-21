@@ -16,8 +16,14 @@ def plot_cells(coord_array,N):
 	# N    		  	  : type --- positive integer		   	#
 	# 			 	  - number of lines across unit cells  	# 
 	# ----------------------------------------------------- #
+	
+	xfigScale = max(coord_array[:,0])
+	yfigScale = max(coord_array[:,1])
+	figScale = 2
+
 	fig, ax = plt.subplots()
 
+	fig.set_size_inches(figScale*xfigScale,figScale*yfigScale)
 	coord_array = make_tuple(coord_array)
 
 	for row in range(0,len(coord_array),2):
