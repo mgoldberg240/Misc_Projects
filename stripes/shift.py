@@ -43,7 +43,8 @@ def shift(coord_array,direction,N,O):
 	def invert(coord_array,N):
 		coord_array[:,0] = -coord_array[:,0] + N
 		return coord_array
-	if O == 1:
+	sort_shift = np.sort(shift)
+	if O == 1 and np.array_equal(sort_shift[0,:],[0,0]):
 		shift = invert(shift,N)	
 
 	combined = np.vstack([coord_array,shift]) # append new coordinates to bottom

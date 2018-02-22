@@ -34,5 +34,8 @@ def plot_cells(coord_array,N):
 		ax.plot(x, y, color='k',linewidth=1, solid_capstyle='round', zorder=2)
 		# ax.set_title('unit cell with ' + str(N) + ' stripes')
 	
-	plt.show()
+	plt.draw()
+	plt.pause(1)
+	plt.waitforbuttonpress(0)
+	plt.close(fig)
 	fig.clf()
