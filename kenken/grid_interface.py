@@ -1,9 +1,9 @@
-#Taken from https://stackoverflow.com/questions/30023763/how-to-make-an-interactive-2d-grid-in-a-window-in-python
+# Sources: https://stackoverflow.com/questions/30023763/how-to-make-an-interactive-2d-grid-in-a-window-in-python
 from tkinter import *
 class Cell():
-    FILLED_COLOR_BG = "white"
+    FILLED_COLOR_BG = "light goldenrod"
     EMPTY_COLOR_BG = "white"
-    FILLED_COLOR_BORDER = "red"
+    FILLED_COLOR_BORDER = "white"
     EMPTY_COLOR_BORDER = "black"
 
     def __init__(self, master, x, y, size):
@@ -22,19 +22,24 @@ class Cell():
         ymin = self.ord * self.size
         ymax = ymin + self.size
 
+
     def draw(self):
         """ order to the cell to draw its representation on the canvas """
-
+        
         if self.master != None : # any user action
-            Cell.update_count
             fill = Cell.FILLED_COLOR_BG
             outline = Cell.FILLED_COLOR_BORDER
+            w = 5
+            text_on = 1
+
 
             if not self.fill:
                 fill = Cell.EMPTY_COLOR_BG
                 outline = Cell.EMPTY_COLOR_BORDER
-                self.update_count
-            
+                w = 1
+                text_on = 0
+                # self.minis.append([abs,ord])
+
             xmin = self.abs * self.size
             xmax = xmin + self.size
             ymin = self.ord * self.size
@@ -45,32 +50,16 @@ class Cell():
             xmid = xmid + xmin
             ymid = ymid + ymin
 
-            self.master.create_rectangle(xmin, ymin, xmax, ymax, fill = fill, outline = outline)
+            self.master.create_rectangle(xmin, ymin, xmax, ymax, fill = fill, outline = outline,width = w)
 
-            self.master.create_text(xmid, ymid, fill = 'black',text = '%s,%s'%(xmid,ymid))
+            if text_on:
+                self.master.create_text(xmid, ymid, fill = 'black',text = '%s,%s'%(xmid,ymid))
 
-class Application(Frame):
-
-    def __init__(self, master):
-        Frame.__init__(self,master)
-        self.grid()
-        self.bttn_clicks = 0
-        self.create_widget()
-
-    def create_widget(self):
-        self.bttn = Button(self)
-        self.bttn['text'] = "Total Clicks: 0"
-        self.bttn['command'] = self.update_count
-        self.bttn.grid()
-
-    def update_count(self):
-        self.bttn_clicks += 1
-        self.bttn['text'] = "Total Clicks: " + str(self.bttn_clicks)
 
 class CellGrid(Canvas):
     def __init__(self,master, rowNumber, columnNumber, cellSize, *args, **kwargs):
         Canvas.__init__(self, master, width = cellSize * columnNumber , height = cellSize * rowNumber, *args, **kwargs)
-        Application.__init__(self,master)
+        # Application.__init__(self,master)
 
         self.cellSize = cellSize
 
@@ -85,6 +74,7 @@ class CellGrid(Canvas):
 
         #memorize the cells that have been modified to avoid many switching of state during mouse motion.
         self.switched = []
+        self.minis = []
 
         #bind click action
         self.bind("<Button-1>", self.handleMouseClick)  
@@ -96,6 +86,12 @@ class CellGrid(Canvas):
         self.draw()
 
 
+    def record_minis(self,cell):
+        if [cell.abs,cell.ord] in self.minis:
+            self.minis.remove([cell.abs,cell.ord])
+        else:
+            self.minis.append([cell.abs,cell.ord])
+        print(self.minis)
 
     def draw(self):
         for row in self.grid:
@@ -112,6 +108,7 @@ class CellGrid(Canvas):
         cell = self.grid[row][column]
         cell._switch()
         cell.draw()
+        self.record_minis(cell)
         #add the cell to the list of cell switched during the click
         self.switched.append(cell)
 
@@ -122,7 +119,9 @@ class CellGrid(Canvas):
         if cell not in self.switched:
             cell._switch()
             cell.draw()
+            self.record_minis(cell)
             self.switched.append(cell)
+
 
 
 
@@ -136,7 +135,6 @@ if __name__ == "__main__" :
 
 
     app.mainloop()
-    app = Application(root)
 
 
 
