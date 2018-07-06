@@ -71,6 +71,7 @@ def solve(n,puzzle,minis,operators,targets):
 		print('move ',moves)
 		print('position [',x,',',y,']...')
 		print(puzzle)
+
 	def win():
 		print('*****************************')
 		print(puzzle)
@@ -122,6 +123,10 @@ def solve(n,puzzle,minis,operators,targets):
 			# print("end of turn val: ",puzzle[x,y])
 			x,y = advance(x,y)
 		moves = moves + 1
+
+		if moves % 1000 == 0:
+			newturn()
+
 	win()
 	return puzzle
 

@@ -1,5 +1,6 @@
 # Sources: https://stackoverflow.com/questions/30023763/how-to-make-an-interactive-2d-grid-in-a-window-in-python
 from tkinter import *
+
 class Cell():
     FILLED_COLOR_BG = "light goldenrod"
     EMPTY_COLOR_BG = "white"
@@ -22,6 +23,9 @@ class Cell():
         ymin = self.ord * self.size
         ymax = ymin + self.size
 
+    # def confirm_mini(self):
+    #     self.fill = EMPTY_COLOR_BG = "white"
+    #     self.outline = FILLED_COLOR_BORDER = "white"
 
     def draw(self):
         """ order to the cell to draw its representation on the canvas """
@@ -56,10 +60,14 @@ class Cell():
                 self.master.create_text(xmid, ymid, fill = 'black',text = '%s,%s'%(xmid,ymid))
 
 
-class CellGrid(Canvas):
+class CellGrid(Canvas,Menu):
     def __init__(self,master, rowNumber, columnNumber, cellSize, *args, **kwargs):
+        Menu.__init__(self, master)
         Canvas.__init__(self, master, width = cellSize * columnNumber , height = cellSize * rowNumber, *args, **kwargs)
-        # Application.__init__(self,master)
+
+
+        # self.win2 = Menu(self)
+        # self.win2.pack(side="left", padx=100, pady=100)
 
         self.cellSize = cellSize
 
@@ -86,11 +94,13 @@ class CellGrid(Canvas):
         self.draw()
 
 
+
     def record_minis(self,cell):
-        if [cell.abs,cell.ord] in self.minis:
-            self.minis.remove([cell.abs,cell.ord])
+        cellindex = [cell.ord,cell.abs]
+        if cellindex in self.minis:
+            self.minis.remove(cellindex)
         else:
-            self.minis.append([cell.abs,cell.ord])
+            self.minis.append(cellindex)
         print(self.minis)
 
     def draw(self):
@@ -123,18 +133,40 @@ class CellGrid(Canvas):
             self.switched.append(cell)
 
 
+class Menu(Frame):
+    def __init__(self,master,*args, **kwargs):
 
+        Frame.__init__(self, *args, **kwargs)
+
+        L = Label(master, text = "enter mini data",font=("Ariel", 16))
+        L.pack(side="right",expand=True, padx=2, pady=2)
+
+
+        entry = Entry(master)
+        entry.pack(side="right",expand=True, padx=2, pady=2)
+        entry.focus_set()
+
+
+        def callback():
+            text = entry.get()
+            print(text)
+            # cell.confirm_mini(self)
+
+        button = Button(master,height = 4,width = 15, text = 'create mini', font=("Ariel", 16),command=callback)
+        button.pack(side="right", expand=True, padx=2, pady=2)
 
 
 
 if __name__ == "__main__" :
+    n = int(input("Input size of puzzle: "))
     app = Tk()
-
-    grid = CellGrid(app, 6, 6, 100)
+    grid = CellGrid(app, n, n, 100)
     grid.pack()
 
 
     app.mainloop()
+    # entry = Entry(master, width=50)
+    # entry.pack()
 
 
 
