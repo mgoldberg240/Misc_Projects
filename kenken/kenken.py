@@ -1,6 +1,18 @@
-import numpy as np
+# Created by Matt Goldberg on July 5 2018
+# Solve kenken puzzle using backtracking algorithm
+#
+# parameters:
+# -- n ---------------- puzzle side length; integer; e.g. 4
+# -- minis ------------ cages, define an arithmetic problem; array; e.g. minis = [0,0,1,1,2,3,3,1,4,3,3,5,4,6,6,5]
+# -- operators -------- arithmetic operator symbols; list; e.g. op = ['/','+','!','*','-','/','+']
+# -- targets ---------- target mini valuesarray; e.g. targets = [2,7,4,12,2,2,5]
 
-def solve(puzzle,minis,operators,targets):
+import numpy as np
+from timeit import default_timer as timer
+
+def solve(n,puzzle,minis,operators,targets):
+	start = timer()
+
 	def game_summary():
 		print('puzzle')
 		print(puzzle)
@@ -35,11 +47,6 @@ def solve(puzzle,minis,operators,targets):
 			return 1
 		else:
 			return 0
-	def full_mini(x,y): # returns 1 if mini is full, 0 otherwise
-		if (minis == minis[x,y]).sum() == np.count_nonzero(puzzle*(minis == minis[x,y])): # this is what it means for a mini to be full!
-			return 1
-		else:
-			return 0
 	def mini_check(this_mini,op,target):
 			current = puzzle[np.equal(minis,this_mini)] # the mini in question, this_mini
 			current.sort()
@@ -66,24 +73,28 @@ def solve(puzzle,minis,operators,targets):
 		print(puzzle)
 	def win():
 		print('*****************************')
-		print('puzzle completed in %d moves'%(moves))
 		print(puzzle)
+		end = timer()
+		time = end - start
+		print('puzzle completed in %d moves'%(moves))
+		print('elapse time %f seconds'%(time))
 		# print('number of moves = ',moves)
 		print('*****************************')
 
 
 
-
+	# initialize algorithm variables
 	allvals = np.array(range(1,n+1)) # e.g. [1,2,3,4] for n = 4 puzzle
 	x = 0
 	y = 0
 	moves  = 0
-	flow = 0 # proceeding forwards
+
+	# loop through puzzle grid
 	while x <= n-1 and y <= n-1:
-		newturn()
-		print("start of turn val: ",puzzle[x,y])
+		# newturn()
+		# print("start of turn val: ",puzzle[x,y])
 		validval = available(x,y)
-		print("valid values: ",validval)
+		# print("valid values: ",validval)
 		if validval.size == 0: # no legal move at x,y
 			puzzle[x,y] = 0
 			x,y = retreat(x,y)
@@ -94,7 +105,6 @@ def solve(puzzle,minis,operators,targets):
 				puzzle[x,y] = np.min(validval)
 			elif (0 < puzzle[x,y] < n) and (validbool.sum() > 0):
 				puzzle[x,y] = np.min(validval[validbool])
-				#alidval.size == 0:
 			else:
 				puzzle[x,y] = 0
 				x,y = retreat(x,y)
@@ -102,34 +112,36 @@ def solve(puzzle,minis,operators,targets):
 
 		if full_mini(x,y): # current mini is full, proceed to mini check
 			mini_index = minis[x,y]
-			if mini_check(mini_index,op[mini_index],targets[mini_index]):
-				print('mini %d is correct'%(mini_index))
+			if mini_check(mini_index,operators[mini_index],targets[mini_index]):
+				# print('mini %d is correct'%(mini_index))
 				x,y = advance(x,y)
 			else: 
-				print('mini %d is INCORRECT'%(mini_index))
+				# print('mini %d is INCORRECT'%(mini_index))
+				continue
 		else:
-			print("end of turn val: ",puzzle[x,y])
+			# print("end of turn val: ",puzzle[x,y])
 			x,y = advance(x,y)
 		moves = moves + 1
 	win()
+	return puzzle
 
 
 ### SAMPLE PUZZLE 1
-n = 4
-puzzle = np.zeros([n,n])
-puzzle[1,0] = 4
-puzzle = puzzle.astype(int)
+# n = 4
+# puzzle = np.zeros([n,n])
+# puzzle[1,0] = 4
+# puzzle = puzzle.astype(int)
 
-minis = [0,0,1,1,2,3,3,1,4,3,3,5,4,6,6,5]
-minis = np.array(minis)
-minis = np.reshape(minis,[n,n])
-minis = minis.astype(int)
+# minis = [0,0,1,1,2,3,3,1,4,3,3,5,4,6,6,5]
+# minis = np.array(minis)
+# minis = np.reshape(minis,[n,n])
+# minis = minis.astype(int)
 
-op = ['/','+','!','*','-','/','+']
+# op = ['/','+','!','*','-','/','+']
 
-targets = [2,7,4,12,2,2,5]
+# targets = [2,7,4,12,2,2,5]
 
-solve(puzzle,minis,op,targets)
+# solve(puzzle,minis,op,targets)
 
 ### SAMPLE PUZZLE 1
 # n = 6
