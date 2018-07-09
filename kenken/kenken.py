@@ -22,6 +22,23 @@ def solve(n,puzzle,minis,operators,targets):
 		print(op)
 		print('target values')
 		print(targets) # used for testing
+
+	def newturn():
+		print('~~~~~~~~~~~~~')
+		print('move ',moves)
+		print('position [',x,',',y,']...')
+		print(puzzle)
+
+	def win():
+		print('*****************************')
+		print(puzzle)
+		end = timer()
+		time = end - start
+		print('puzzle completed in %d moves'%(moves))
+		print('elapsed time %f seconds'%(time))
+		# print('number of moves = ',moves)
+		print('*****************************')
+
 	def advance(x,y):
 		if y == n-1: # row position n-1 (end) in col y, advance down a row
 			y = 0
@@ -66,25 +83,10 @@ def solve(n,puzzle,minis,operators,targets):
 			else:
 				# print('mini ',this_mini,' is INCORRECT')
 				return 0
-	def newturn():
-		print('~~~~~~~~~~~~~')
-		print('move ',moves)
-		print('position [',x,',',y,']...')
-		print(puzzle)
-
-	def win():
-		print('*****************************')
-		print(puzzle)
-		end = timer()
-		time = end - start
-		print('puzzle completed in %d moves'%(moves))
-		print('elapse time %f seconds'%(time))
-		# print('number of moves = ',moves)
-		print('*****************************')
 
 
 
-	# initialize algorithm variables
+	# initialize variables
 	allvals = np.array(range(1,n+1)) # e.g. [1,2,3,4] for n = 4 puzzle
 	x = 0
 	y = 0
@@ -129,41 +131,6 @@ def solve(n,puzzle,minis,operators,targets):
 
 	win()
 	return puzzle
-
-
-### SAMPLE PUZZLE 1
-# n = 4
-# puzzle = np.zeros([n,n])
-# puzzle[1,0] = 4
-# puzzle = puzzle.astype(int)
-
-# minis = [0,0,1,1,2,3,3,1,4,3,3,5,4,6,6,5]
-# minis = np.array(minis)
-# minis = np.reshape(minis,[n,n])
-# minis = minis.astype(int)
-
-# op = ['/','+','!','*','-','/','+']
-
-# targets = [2,7,4,12,2,2,5]
-
-# solve(puzzle,minis,op,targets)
-
-### SAMPLE PUZZLE 1
-# n = 6
-# puzzle = np.zeros([n,n])
-# puzzle = puzzle.astype(int)
-
-# minis = [0,1,1,2,3,3,0,4,4,2,5,3,6,6,7,7,5,3,6,6,8,9,10,10,11,11,8,9,9,12,13,13,13,14,14,12]
-# minis = np.array(minis)
-# minis = np.reshape(minis,[n,n])
-# minis = minis.astype(int)
-
-# op = ['+','/','*','*','-','/','*','*','*','+','*','*','+','+','/']
-
-# targets = [11,2,20,6,3,3,240,6,6,7,30,6,9,8,2]
-
-# solve(puzzle,minis,op,targets)
-
 
 
 
