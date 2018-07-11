@@ -1,0 +1,11 @@
+June 12 2018
+
+——- Bugs ——-
+
+ - full minis are not identified correctly. This example puzzle is good because mini 0 should be full after move 2, and even better, move_check should succeed with puzzle[0,0] = 1 and puzzle[0,1] = 2
+ - Something wrong with line 85, np.min(newvalid[newvalid > puzzle[x,y]]). The expression [newvalid > puzzle[x,y]] yields [False], and newvalid = [2]. newvalid[False] = [], I think. Then python doesn't like taking the min of an empty array. I don't think that expression should ever be empty
+
+——- Future Directions ———
+
+ - kenken solver app: GUI allowing for easy puzzle input, mini input, etc. Idk, could be fun
+ - The whole layout of nested conditionals is pretty nuts and probably unnecessary. Would be nice to make this all more concise.

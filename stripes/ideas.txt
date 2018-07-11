@@ -1,0 +1,46 @@
+Feb 21, 2018:
+Rather than copying and pasting from the previous cell coordinates, constructing a stripe-pixel string could use something like the below representation of the letter 'A' (no border):
+
+
+string space	cell space
+
+				[1,1,1]
+	A 		 	[1,0,1]
+				[1,1,1]
+				[1,0,1]
+				[1,0,1]
+
+It would be nice if the code could take in a string and recognize how many cells it will take up.  e.g. 'A' in the above example takes would cover a 5x3 grid.  Some type of dual graph would be nice.
+The benefit of this is it avoids having to tell the drawer to move a certain direction (up, down, left, right), register the correct orientation, append the new cells' coordinates, then continue on.
+
+With this idea of a boolean array in cell space, one could first construct the total array using vstack and hstack, make a larger array like "abc" as shown below, and then have two loops iterating through the total array line by line interpreting the cells orientation and then appending the new coordinates.
+
+"abc" with borders (blur your eyes, stupid) as a "cell space array"
+
+[0,0,0,0,0,0,0,0,0,0,0,0,0]
+[0,1,1,1,0,1,1,0,0,1,1,1,0]
+[0,1,0,1,0,1,0,1,0,1,0,0,0]
+[0,1,1,1,0,1,1,0,0,1,0,0,0]
+[0,1,0,1,0,1,0,1,0,1,0,0,0]
+[0,1,0,1,0,1,1,0,0,1,1,1,0]
+[0,0,0,0,0,0,0,0,0,0,0,0,0]
+
+
+
+Want some script that accepts a string, e.g. "abc".  Draws like a typewriter:
+start1 -> -> -> -> -> end
+start2 -> -> -> -> -> end ...
+
+Pseudocode below
+
+draw_cells(string)
+	string -> cell space array (CSA)
+	for j in range(0,height(CSA)):
+		for i in range(0,length(CSA)):
+			cell = shift(cell,'r',orientation)
+			if i == len(CSA):
+				set first_cell: take first cell in row (first 2 rows for N = 1)
+				row_start_cell = shift(first_cell,'down')
+		endfor
+	endfor
+
