@@ -41,17 +41,35 @@ class play(grid):
 	def slide(self):
 			[x],[y] = np.where(self.grid==self.position)
 
+			def zero_position(self):
+				[zx],[zy] = np.where(self.grid==0)
+				return zx,zy
+
 			row = np.setdiff1d(self.grid[x,:],self.position)
 			col = np.setdiff1d(self.grid[:,y],self.position)
 
+			zx,zy = zero_position(self)
 
 			# roll mechanics --- jot down the cases
 			if (row==0).sum() == 1: # the blank is in this row
 				print('moved row')
-				self.grid[x] = np.roll(self.grid[x],1)  # if the blank is at either end of the row --- might need to roll different directions accordingly
+				# print(x,zx)
+				dist = abs(y-zy)
+				print("distance from %d to zero = %d"%(self.position,dist))
+				print("x,y = ",x,y)
+				
+				count = 0
+				while not np.array_equal([zx,zy],[x,y]):# and count < 3:
+
+					self.grid[x,y:zy+1] = np.roll(self.grid[x,y:zy+1],1) # roll part of row
+					zx,zy = zero_position(self)
+					print("zx,zy = ",zx,zy)
+					count += 1
 			elif (col==0).sum() == 1: # the blank is in this col
 				print('moved col')
-				self.grid[:,y] = np.roll(self.grid[:,y],1) # if the blank is at either end of the col 
+				dist = abs(x-zx)
+				print("distance from %d to zero = %d"%(self.position,dist))
+				# self.grid[:,y] = np.roll(self.grid[:,y],1) # if the blank is at either end of the col 
 			else:
 				print('invalid move')
 
