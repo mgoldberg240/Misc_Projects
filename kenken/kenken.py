@@ -1,4 +1,4 @@
-# Created by Matt Goldberg on July 5 2018
+## Created by Matt Goldberg on July 5 2018
 # Solve kenken puzzle using backtracking algorithm
 #
 # parameters:
