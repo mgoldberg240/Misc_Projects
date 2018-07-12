@@ -4,6 +4,7 @@ import os
 
 def clear():
     os.system('cls' if os.name=='nt' else 'clear')
+clear()
 
 class grid():
 	def __init__(self,size):
@@ -22,19 +23,20 @@ class play(grid):
 		# self.y = y
 		self.turn_count = 0
 
-		solved = (self.grid)+1
+		# solved state of puzzle
+		solved = (self.grid_array)+1
 		solved[-1] = 0
 		solved = solved.reshape([size,size])
 
-
-		while not np.array_equal(self.grid,solved):
+		while not np.array_equal(self.grid,solved): # play until the puzzle is solved
 			print(self.grid)
 			self.turn()
 
 
 	def get_move(self):
+		print('')
 		self.position = int(input("turn %d: "%(self.turn_count)))
-		#clear()
+		clear()
 		self.turn_count += 1
 		# return self.position
 
@@ -43,7 +45,7 @@ class play(grid):
 
 			def zero_position(self):
 				[zx],[zy] = np.where(self.grid==0)
-				return zx,zy
+				return zx,zy # zero x and y coordinates
 
 			row = np.setdiff1d(self.grid[x,:],self.position)
 			col = np.setdiff1d(self.grid[:,y],self.position)
@@ -52,24 +54,22 @@ class play(grid):
 
 			# roll mechanics --- jot down the cases
 			if (row==0).sum() == 1: # the blank is in this row
-				print('moved row')
-				# print(x,zx)
-				dist = abs(y-zy)
-				print("distance from %d to zero = %d"%(self.position,dist))
-				print("x,y = ",x,y)
-				
-				count = 0
-				while not np.array_equal([zx,zy],[x,y]):# and count < 3:
+				if zy < y: # zero is left of selected tile
+					group = np.hstack((self.grid[x,zy+1:y+1],0))
+					self.grid[x,zy:y+1] = group
+				else: # zero is right of selected tile
+					group = np.hstack((0,self.grid[x,y:zy]))
+					self.grid[x,y:zy+1] = group
 
-					self.grid[x,y:zy+1] = np.roll(self.grid[x,y:zy+1],1) # roll part of row
-					zx,zy = zero_position(self)
-					print("zx,zy = ",zx,zy)
-					count += 1
+
+
 			elif (col==0).sum() == 1: # the blank is in this col
-				print('moved col')
-				dist = abs(x-zx)
-				print("distance from %d to zero = %d"%(self.position,dist))
-				# self.grid[:,y] = np.roll(self.grid[:,y],1) # if the blank is at either end of the col 
+				if zx < x: # zero is below selected tile
+					group = np.hstack((self.grid[zx+1:x+1,y],0))
+					self.grid[zx:x+1,y] = group
+				else: # zero is above of selected tile
+					group = np.hstack((0,self.grid[x:zx,y]))
+					self.grid[x:zx+1,y] = group
 			else:
 				print('invalid move')
 
