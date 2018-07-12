@@ -1,6 +1,8 @@
-# Created on July 11 2018
+# Created by Matt Goldberg on July 11 2018
+
 import numpy as np
 import os
+
 
 def clear():
     os.system('cls' if os.name=='nt' else 'clear')
@@ -11,7 +13,10 @@ class grid():
 		self.size = size
 
 		self.grid_array = np.arange(size**2)
-		self.grid = np.random.permutation(self.grid_array).reshape((size,size))
+		self.rand_array = np.random.permutation(self.grid_array)
+
+		self.grid = self.rand_array.reshape((size,size))
+		print(self.grid)
 
 
 
@@ -78,6 +83,6 @@ class play(grid):
 		self.slide()
 
 if __name__ == "__main__":
-	n = 4
+	#n = 4
 	play(n)
 
